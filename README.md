@@ -241,19 +241,3 @@ After Hyperopt tuning, XGBoost RMSE typically drops a further 3–8 % depending 
 | Data | pandas ≥ 2.0, numpy ≥ 1.24 |
 | Backend store | SQLite (no separate server needed) |
 | Language | Python 3.10 – 3.12 |
-
----
-
-## Submission
-
-Pack the project for submission according to the course format:
-
-```bash
-cd ..
-zip -r PRJ-MasaBokhary-2287036.zip retail-price-mlflow/ \
-    --exclude "retail-price-mlflow/.venv/*" \
-    --exclude "retail-price-mlflow/**/__pycache__/*" \
-    --exclude "retail-price-mlflow/data/online_retail_II.csv"
-```
-
-> Exclude the 90 MB CSV and the virtual environment to keep the archive small. Include a note in your submission that the dataset must be downloaded separately from the UCI link above.
