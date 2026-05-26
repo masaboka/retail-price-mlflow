@@ -30,6 +30,8 @@ flowchart TD
     monitor --> mlflowUI
 ```
 
+
+
 ---
 
 ## Repository Structure
@@ -38,8 +40,7 @@ flowchart TD
 retail-price-mlflow/
 ├── MLops Project.py          # Root-level entry point (aliases src/train_experiments.py)
 ├── requirements.txt          # Pinned dependencies
-├── RUNBOOK.txt               # Quick-reference command cheatsheet
-├── README.md                 # This file
+├── README.md                 # This file (includes full step-by-step run guide)
 │
 ├── data/
 │   └── online_retail_II.csv  # UCI Online Retail II dataset (place here before running)
@@ -63,15 +64,17 @@ retail-price-mlflow/
 ## Dataset
 
 **Online Retail II** — UCI Machine Learning Repository  
-<https://archive.ics.uci.edu/dataset/502/online+retail+ii>
+[https://archive.ics.uci.edu/dataset/502/online+retail+ii](https://archive.ics.uci.edu/dataset/502/online+retail+ii)
 
-| Property | Value |
-|---|---|
-| Records | ~541 000 transactions |
-| Period | 01 Dec 2009 – 09 Dec 2011 |
-| Domain | UK-based non-store online retail |
-| Target | `Price` — unit price per item (GBP) |
+
+| Property     | Value                                                            |
+| ------------ | ---------------------------------------------------------------- |
+| Records      | ~541 000 transactions                                            |
+| Period       | 01 Dec 2009 – 09 Dec 2011                                        |
+| Domain       | UK-based non-store online retail                                 |
+| Target       | `Price` — unit price per item (GBP)                              |
 | Key features | `StockCode`, `Description`, `Quantity`, `Country`, `InvoiceDate` |
+
 
 The target is log-transformed (`log1p(Price)`) during training; all evaluation metrics are reported in log-space.
 
@@ -127,7 +130,7 @@ Set `RETAIL_SAMPLE_FRAC=1` or omit it to train on the full dataset (slower, need
 .venv/bin/mlflow ui --backend-store-uri sqlite:///$(pwd)/mlflow_data/tracking.db
 ```
 
-Open <http://127.0.0.1:5000> in your browser. Compare RMSE, MAE, and R² across runs, drill into parameters, and download model artifacts.
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser. Compare RMSE, MAE, and R² across runs, drill into parameters, and download model artifacts.
 
 ### Step 3 — Hyperparameter tuning
 
@@ -206,12 +209,14 @@ Scores a held-out 8 % batch of the dataset and logs `monitoring_rmse`, `monitori
 
 ## Models Compared
 
-| Model | Notes |
-|---|---|
-| Ridge (linear) | Baseline; fast, interpretable |
-| Random Forest | 120 trees, unlimited depth |
-| XGBoost | 200 rounds, depth 8, lr 0.08 (preferred) |
-| HistGBRT | sklearn fallback when XGBoost unavailable |
+
+| Model          | Notes                                     |
+| -------------- | ----------------------------------------- |
+| Ridge (linear) | Baseline; fast, interpretable             |
+| Random Forest  | 120 trees, unlimited depth                |
+| XGBoost        | 200 rounds, depth 8, lr 0.08 (preferred)  |
+| HistGBRT       | sklearn fallback when XGBoost unavailable |
+
 
 All models are wrapped in a **scikit-learn `Pipeline`** (imputation → scaling/OHE → estimator), ensuring identical preprocessing for training, inference, and serving.
 
@@ -221,11 +226,13 @@ All models are wrapped in a **scikit-learn `Pipeline`** (imputation → scaling/
 
 On a 25 % sample of the data (≈135 k rows after cleaning), typical validation metrics:
 
-| Model | RMSE (log-space) | MAE (log-space) | R² |
-|---|---|---|---|
-| Ridge | ~0.55 | ~0.38 | ~0.22 |
-| Random Forest | ~0.38 | ~0.26 | ~0.60 |
-| XGBoost | ~0.33 | ~0.22 | ~0.68 |
+
+| Model         | RMSE (log-space) | MAE (log-space) | R²    |
+| ------------- | ---------------- | --------------- | ----- |
+| Ridge         | ~0.55            | ~0.38           | ~0.22 |
+| Random Forest | ~0.38            | ~0.26           | ~0.60 |
+| XGBoost       | ~0.33            | ~0.22           | ~0.68 |
+
 
 After Hyperopt tuning, XGBoost RMSE typically drops a further 3–8 % depending on `max_evals`.
 
@@ -233,11 +240,14 @@ After Hyperopt tuning, XGBoost RMSE typically drops a further 3–8 % depending 
 
 ## Tech Stack
 
-| Component | Library / Tool |
-|---|---|
-| ML lifecycle | MLflow ≥ 2.14 |
-| Models | scikit-learn ≥ 1.3, XGBoost ≥ 2.0 |
-| Hyperparameter search | Hyperopt ≥ 0.2.7 |
-| Data | pandas ≥ 2.0, numpy ≥ 1.24 |
-| Backend store | SQLite (no separate server needed) |
-| Language | Python 3.10 – 3.12 |
+
+| Component             | Library / Tool                     |
+| --------------------- | ---------------------------------- |
+| ML lifecycle          | MLflow ≥ 2.14                      |
+| Models                | scikit-learn ≥ 1.3, XGBoost ≥ 2.0  |
+| Hyperparameter search | Hyperopt ≥ 0.2.7                   |
+| Data                  | pandas ≥ 2.0, numpy ≥ 1.24         |
+| Backend store         | SQLite (no separate server needed) |
+| Language              | Python 3.10 – 3.12                 |
+
+
